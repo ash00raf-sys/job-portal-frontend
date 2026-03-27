@@ -1,0 +1,7 @@
+{{- $imageClass := .ImageClass | default "img-fluid" -}}
+{{- $textClass := .TextClass | default "brand-text-logo" -}}
+{{- $tagline := site.Params.brandTagline | default "Your Job Search Ends Here" -}}
+<span class="brand-mark">
+  <span class="{{ $textClass }}">{{ site.Params.logoText | default "JobSearchEnds" }}</span>
+  <span class="brand-tagline">{{ $tagline }}</span>
+</span>

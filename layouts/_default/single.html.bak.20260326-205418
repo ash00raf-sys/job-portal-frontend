@@ -1,0 +1,100 @@
+{{ define "main" }}
+{{ $hidePageImage := or (.Params.hide_image) (in (slice "privacy-policy" "disclaimer" "contact") .Section) (eq .File.ContentBaseName "privacy-policy") }}
+{{ $hidePageAds := or (.Params.hide_ads) (in (slice "privacy-policy" "disclaimer" "contact") .Section) (eq .File.ContentBaseName "privacy-policy") }}
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-8">
+        <article class="single-page-main single-page-default">
+          {{ with .Params.Categories }}
+          <div class="post-categories mb-2">
+            {{ range . }}
+            <a href="{{ `categories/` | relLangURL }}{{ . | urlize | lower }}/" class="text-primary">{{ . | title | humanize }}</a>
+            {{ end }}
+          </div>
+          {{ end }}
+
+          <header class="single-page-header mb-3">
+            <h1>{{ .Title | markdownify }}</h1>
+            <div class="post-meta">
+              <span>By {{ if .Params.Author }}{{ .Params.Author }}{{ else }}{{ .Site.Params.Author }}{{ end }}</span>
+              {{ if not .Params.HideDate }}
+              <span class="border-bottom border-primary px-2 mx-1"></span>
+              <span>{{ .PublishDate.Format "02 January 2006" }}</span>
+              {{ end }}
+            </div>
+          </header>
+
+          {{ if not $hidePageAds }}
+          <div class="single-page-ad single-page-ad-top">
+            {{ partial "ads/top-banner.html" . }}
+          </div>
+          {{ end }}
+
+          {{ if and (not $hidePageImage) .Params.image }}
+          <div class="single-page-image-wrap mb-4">
+            {{ partial "image.html" (dict
+              "Page" .
+              "Alt" .Title
+              "Class" "img-fluid w-100"
+              "Size" 900
+              "Loading" "eager"
+              "FetchPriority" "high"
+            ) }}
+          </div>
+          {{ end }}
+
+          <div class="single-page-content content mb-4">
+            {{ $blocks := split .RawContent "\n## " }}
+            {{ if gt (len $blocks) 0 }}
+              {{ range $index, $block := $blocks }}
+                {{ $section := $block }}
+                {{ if and (gt $index 0) (not (hasPrefix $block "## ")) }}
+                  {{ $section = printf "## %s" $block }}
+                {{ end }}
+                {{ if trim $section " \n\r\t" }}
+                <div class="content-section-block">
+                  {{ $section | markdownify }}
+                </div>
+
+                {{ if and (not $hidePageAds) (eq $index 1) }}
+                <div class="single-page-ad single-page-ad-inline">
+                  {{ partial "ads/in-content.html" $ }}
+                </div>
+                {{ end }}
+
+                {{ if and (not $hidePageAds) (eq $index 2) }}
+                <div class="single-page-ad single-page-ad-inline">
+                  {{ partial "ads/in-content.html" $ }}
+                </div>
+                {{ end }}
+
+                {{ if and (not $hidePageAds) (eq $index 4) }}
+                <div class="single-page-ad single-page-ad-bottom">
+                  {{ partial "ads/bottom-banner.html" $ }}
+                </div>
+                {{ end }}
+                {{ end }}
+              {{ end }}
+            {{ else }}
+              {{ .Content }}
+            {{ end }}
+          </div>
+
+          {{ template "_internal/disqus.html" . }}
+        </article>
+      </div>
+
+      <aside class="col-lg-4 col-xl-3 d-none d-lg-block">
+        <div class="single-page-sidebar">
+          {{ if not $hidePageAds }}
+          {{ partial "ads/sidebar-vertical.html" . }}
+          {{ end }}
+          {{ partial "sidebar.html" . }}
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,83 @@
+baseURL = "http://jobsearchend.com/"
+languageCode = "en-us"
+title = "JobSearchEnds"
+theme = "liva-hugo"
+enableRobotsTXT = true
+summaryLength = 20
+pagination.pagerSize = 6
+
+[params]
+logo = "images/logo.png"
+logoText = "JobSearchEnds"
+brandTagline = "Your Job Search Ends Here"
+home = "Home"
+subtitle = "Latest verified vacancies and practical career updates across Gulf, Kerala, government, and private sectors."
+description = "Latest verified vacancies and practical career updates across Gulf, Kerala, government, and private sectors."
+author = "JobSearchEnds"
+mobile = "+91 00000 00000"
+email = "contact@jobsearchends.example"
+location = "Kerala, India"
+copyright = "| copyright &copy; 2026 [JobSearchEnds](/) All Rights Reserved |"
+
+[services]
+  [services.googleAnalytics]
+  ID = "G-MEASUREMENT_ID"
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[params.plugins]
+
+[[params.plugins.css]]
+URL = "plugins/bootstrap/bootstrap.min.css"
+
+[[params.plugins.css]]
+URL = "plugins/themify-icons/themify-icons.css"
+
+[[params.plugins.js]]
+URL = "plugins/jQuery/jquery.min.js"
+
+[[params.plugins.js]]
+URL = "plugins/bootstrap/bootstrap.min.js"
+
+[params.preloader]
+enable = false
+preloader = ""
+
+[params.search]
+enable = true
+
+[params.newsletter]
+enable = false
+title = "Get Job Alerts"
+content = "Get simple, timely job updates and career tips delivered to your inbox."
+
+[params.cookies]
+enable = true
+expire_days = 2
+
+[[params.social]]
+title = "facebook"
+icon = "ti-facebook"
+link = "#"
+
+[[params.social]]
+title = "telegram"
+icon = "ti-comments"
+link = "#"
+
+[[params.social]]
+title = "youtube"
+icon = "ti-youtube"
+link = "#"
+
+[[params.social]]
+title = "linkedin"
+icon = "ti-linkedin"
+link = "#"
+
+relativeURLs = true
+canonifyURLs = false

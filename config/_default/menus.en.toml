@@ -1,0 +1,59 @@
+[[main]]
+name = "Home"
+URL = "/"
+weight = 1
+
+[[main]]
+name = "Gulf Jobs"
+URL = "gulf-jobs/"
+weight = 2
+
+[[main]]
+name = "Kerala Jobs"
+URL = "kerala-jobs/"
+weight = 3
+
+[[main]]
+name = "Government Jobs"
+URL = "government-jobs/"
+weight = 4
+
+[[main]]
+name = "Private Jobs"
+URL = "private-jobs/"
+weight = 5
+
+[[main]]
+name = "Articles"
+URL = "articles/"
+weight = 6
+
+[[main]]
+name = "About"
+URL = "about/"
+weight = 7
+
+[[main]]
+name = "Contact"
+URL = "contact/"
+weight = 8
+
+[[footer]]
+name = "About"
+URL = "about/"
+weight = 1
+
+[[footer]]
+name = "Contact"
+URL = "contact/"
+weight = 2
+
+[[footer]]
+name = "Privacy Policy"
+URL = "privacy-policy/"
+weight = 3
+
+[[footer]]
+name = "Disclaimer"
+URL = "disclaimer/"
+weight = 4
