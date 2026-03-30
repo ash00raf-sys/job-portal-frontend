@@ -84,5 +84,4 @@
   {{ if and site.Config.Services.GoogleAnalytics.ID (ne site.Config.Services.GoogleAnalytics.ID "G-MEASUREMENT_ID") }}
     {{ partial "google_analytics.html" . }}
   {{ end }}
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7211302488349953" crossorigin="anonymous"></script>
 </head>
