@@ -1,0 +1,86 @@
+<head>
+  <meta charset="utf-8">
+
+  {{ $siteTitle := .Site.Title }}
+  {{ $pageTitle := .Title }}
+  {{ $title := $siteTitle }}
+  {{ if and (not .IsHome) $pageTitle }}
+    {{ $title = printf "%s | %s" $pageTitle $siteTitle }}
+  {{ end }}
+
+  {{ $description := .Site.Params.description }}
+  {{ with .Description }}
+    {{ $description = . }}
+  {{ else }}
+    {{ with .Params.description }}
+      {{ $description = . }}
+    {{ else }}
+      {{ with .Summary }}
+        {{ $description = . | plainify | truncate 160 }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{ $canonical := .Permalink }}
+  {{ $ogImage := "" }}
+  {{ $hidePageImage := or (.Params.hide_image) (in (slice "privacy-policy" "disclaimer" "contact") .Section) }}
+  {{ with .Params.image }}
+    {{ if not $hidePageImage }}
+      {{ with resources.Get . }}
+        {{ $ogImage = .Permalink }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ if and (not $hidePageImage) (eq $ogImage "") (fileExists "static/images/logo.png") }}
+    {{ $ogImage = "images/logo.png" | absURL }}
+  {{ end }}
+  {{ $twitterCard := "summary" }}
+  {{ if $ogImage }}
+    {{ $twitterCard = "summary_large_image" }}
+  {{ end }}
+
+  <title>{{ $title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="{{ $description }}">
+  {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+  <link rel="canonical" href="{{ $canonical }}">
+
+  <meta property="og:title" content="{{ $title }}">
+  <meta property="og:description" content="{{ $description }}">
+  <meta property="og:url" content="{{ $canonical }}">
+  <meta property="og:site_name" content="{{ $siteTitle }}">
+  <meta property="og:locale" content="{{ .Site.LanguageCode }}">
+  {{ if .IsPage }}
+  <meta property="og:type" content="article">
+  {{ else }}
+  <meta property="og:type" content="website">
+  {{ end }}
+  {{ with $ogImage }}<meta property="og:image" content="{{ . }}">{{ end }}
+
+  <meta name="twitter:card" content="{{ $twitterCard }}">
+  <meta name="twitter:title" content="{{ $title }}">
+  <meta name="twitter:description" content="{{ $description }}">
+  {{ with $ogImage }}<meta name="twitter:image" content="{{ . }}">{{ end }}
+
+  <meta name="theme-name" content="job-search" />
+
+  {{ hugo.Generator }}
+
+  {{ range .Site.Params.plugins.css }}
+  <link rel="stylesheet" href="{{ .URL | absURL }}">
+  {{ end }}
+
+  {{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}
+  <link rel="stylesheet" href="{{ $styles.Permalink }}" media="screen">
+
+  {{ with resources.Get "css/custom.css" | minify }}
+  <link rel="stylesheet" href="{{ .Permalink }}" media="screen">
+  {{ end }}
+
+  <link rel="shortcut icon" href="{{ `images/favicon.png` | absURL }}" type="image/x-icon">
+  <link rel="icon" href="{{ `images/favicon.png` | absURL }}" type="image/x-icon">
+
+  {{ if and site.Config.Services.GoogleAnalytics.ID (ne site.Config.Services.GoogleAnalytics.ID "G-MEASUREMENT_ID") }}
+    {{ partial "google_analytics.html" . }}
+  {{ end }}
+</head>

@@ -1,0 +1,255 @@
+{{ define "main" }}
+
+{{ $sections := slice "gulf-jobs" "kerala-jobs" "government-jobs" "private-jobs" "articles" }}
+{{ $posts := where .Site.RegularPages "Section" "in" $sections }}
+{{ $sortedPosts := $posts.ByDate.Reverse }}
+{{ $featured := index $sortedPosts 0 }}
+{{ $recentPosts := after 1 $sortedPosts }}
+{{ $governmentPosts := first 3 (where $sortedPosts "Section" "government-jobs") }}
+{{ $gulfPosts := first 3 (where $sortedPosts "Section" "in" (slice "gulf-jobs" "private-jobs")) }}
+{{ $articlePosts := first 3 (where $sortedPosts "Section" "articles") }}
+
+<section class="homepage-hero section-sm pb-0">
+  <div class="container">
+    <div class="homepage-intro">
+      <div class="homepage-intro-copy">
+        <span class="homepage-kicker">Trusted Job Updates And Career Briefings</span>
+        <h1 class="homepage-title">A cleaner way to track verified openings, deadlines, and practical career guidance.</h1>
+        <p class="homepage-subtitle">Explore fresh government vacancies, Gulf opportunities, private sector roles, and editorial job guidance in one organized portal.</p>
+        <div class="homepage-actions">
+          <a class="btn btn-primary m-1" href="{{ "government-jobs/" | absURL }}">Government Jobs</a>
+          <a class="btn btn-outline-primary m-1" href="{{ "gulf-jobs/" | absURL }}">Gulf Jobs</a>
+          <a class="btn btn-outline-primary m-1" href="{{ "articles/" | absURL }}">Articles</a>
+        </div>
+      </div>
+
+      {{ with $featured }}
+      <article class="homepage-feature-card">
+        <div class="homepage-feature-media">
+          {{ $img := .Params.image }}
+          {{ if $img }}
+            {{ if and (not (hasPrefix $img "http://")) (not (hasPrefix $img "https://")) (not (hasPrefix $img "/")) }}
+              {{ $img = printf "/%s" $img }}
+            {{ end }}
+            <img src="{{ $img }}" alt="{{ .Title }}" class="homepage-feature-image" loading="eager">
+          {{ else }}
+            <div class="homepage-no-image">Featured Update</div>
+          {{ end }}
+        </div>
+        <div class="homepage-feature-body">
+          <div class="homepage-meta-row">
+            <span class="homepage-badge">{{ .Section | replace "-" " " | title }}</span>
+            <span class="homepage-date">{{ .PublishDate.Format "02 January 2006" }}</span>
+          </div>
+          <a href="{{ .Permalink }}" class="homepage-feature-title">{{ .Title | markdownify }}</a>
+          <p class="homepage-feature-excerpt">{{ .Description | default (.Summary | plainify) | truncate 190 }}</p>
+          <div class="homepage-feature-actions">
+            <a href="{{ .Permalink }}" class="btn btn-primary">Read More</a>
+            <a href="{{ "about/" | absURL }}" class="homepage-link-secondary">Why readers trust this portal</a>
+          </div>
+        </div>
+      </article>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="section-sm pt-4">
+  <div class="container">
+    <div class="homepage-ad-wrap">
+      {{ partial "ads/home-top-banner.html" . }}
+    </div>
+  </div>
+</section>
+
+<section class="homepage-main section-sm pt-0">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-xl-9">
+        <div class="homepage-section-head">
+          <div>
+            <span class="homepage-kicker">Fresh Coverage</span>
+            <h2 class="homepage-section-title">Latest openings and career updates</h2>
+          </div>
+          <a href="{{ "search/" | absURL }}" class="homepage-link-secondary">Search the portal</a>
+        </div>
+
+        <div class="row">
+          {{ range $index, $post := first 6 $recentPosts }}
+          <div class="col-md-6 mb-4">
+            <article class="homepage-card">
+              {{ $img := $post.Params.image }}
+              {{ if $img }}
+                {{ if and (not (hasPrefix $img "http://")) (not (hasPrefix $img "https://")) (not (hasPrefix $img "/")) }}
+                  {{ $img = printf "/%s" $img }}
+                {{ end }}
+                <div class="homepage-card-media">
+                  <img src="{{ $img }}" alt="{{ $post.Title }}" class="card-img-top section-card-image" loading="lazy">
+                </div>
+              {{ else }}
+                <div class="homepage-card-media homepage-card-media-empty">
+                  <span>No image provided</span>
+                </div>
+              {{ end }}
+              <div class="homepage-card-body">
+                <div class="homepage-meta-row">
+                  <span class="homepage-badge">{{ $post.Section | replace "-" " " | title }}</span>
+                  <span class="homepage-date">{{ $post.PublishDate.Format "02 January 2006" }}</span>
+                </div>
+                <a href="{{ $post.Permalink }}" class="homepage-card-title">{{ $post.Title | markdownify }}</a>
+                <p class="homepage-card-excerpt">{{ $post.Description | default ($post.Summary | plainify) | truncate 120 }}</p>
+                <a href="{{ $post.Permalink }}" class="homepage-card-link">View details</a>
+              </div>
+            </article>
+          </div>
+          {{ if eq $index 3 }}
+          <div class="col-12 mb-4">
+            <div class="homepage-ad-wrap">
+              {{ partial "ads/home-inline.html" $ }}
+            </div>
+          </div>
+          {{ end }}
+          {{ end }}
+        </div>
+
+        <div class="homepage-sections">
+          <div class="homepage-section-block">
+            <div class="homepage-section-head">
+              <h3 class="homepage-subsection-title">Latest Government Jobs</h3>
+              <a href="{{ "government-jobs/" | absURL }}" class="homepage-link-secondary">View all</a>
+            </div>
+            <div class="row">
+              {{ range $governmentPosts }}
+              <div class="col-md-4 mb-4">
+                <article class="homepage-mini-card">
+                  <a href="{{ .Permalink }}" class="homepage-mini-title">{{ .Title }}</a>
+                  <p class="homepage-mini-text">{{ .Description | default (.Summary | plainify) | truncate 90 }}</p>
+                  <span class="homepage-date">{{ .PublishDate.Format "02 January 2006" }}</span>
+                </article>
+              </div>
+              {{ end }}
+            </div>
+          </div>
+
+          <div class="homepage-section-block">
+            <div class="homepage-section-head">
+              <h3 class="homepage-subsection-title">Latest Gulf And Private Jobs</h3>
+              <a href="{{ "gulf-jobs/" | absURL }}" class="homepage-link-secondary">Browse jobs</a>
+            </div>
+            <div class="row">
+              {{ range $gulfPosts }}
+              <div class="col-md-4 mb-4">
+                <article class="homepage-mini-card">
+                  <a href="{{ .Permalink }}" class="homepage-mini-title">{{ .Title }}</a>
+                  <p class="homepage-mini-text">{{ .Description | default (.Summary | plainify) | truncate 90 }}</p>
+                  <span class="homepage-date">{{ .PublishDate.Format "02 January 2006" }}</span>
+                </article>
+              </div>
+              {{ end }}
+            </div>
+          </div>
+
+          <div class="homepage-section-block">
+            <div class="homepage-section-head">
+              <h3 class="homepage-subsection-title">Latest Articles And Career Tips</h3>
+              <a href="{{ "articles/" | absURL }}" class="homepage-link-secondary">Read articles</a>
+            </div>
+            <div class="row">
+              {{ range $articlePosts }}
+              <div class="col-md-4 mb-4">
+                <article class="homepage-mini-card">
+                  <a href="{{ .Permalink }}" class="homepage-mini-title">{{ .Title }}</a>
+                  <p class="homepage-mini-text">{{ .Description | default (.Summary | plainify) | truncate 90 }}</p>
+                  <span class="homepage-date">{{ .PublishDate.Format "02 January 2006" }}</span>
+                </article>
+              </div>
+              {{ end }}
+            </div>
+          </div>
+        </div>
+
+        <div class="homepage-ad-wrap homepage-ad-wrap-bottom">
+          {{ partial "ads/home-bottom-banner.html" . }}
+        </div>
+
+        <div class="homepage-mobile-sidebar d-lg-none">
+          <div class="widget homepage-sidebar-widget">
+            <h4 class="widget-title">Latest Updates</h4>
+            <ul class="list-unstyled homepage-side-list mb-0">
+              {{ range first 5 $sortedPosts }}
+              <li class="homepage-side-item">
+                <a href="{{ .Permalink }}" class="homepage-side-link">{{ .Title }}</a>
+                <span class="homepage-date">{{ .PublishDate.Format "02 January 2006" }}</span>
+              </li>
+              {{ end }}
+            </ul>
+          </div>
+
+          <div class="widget homepage-sidebar-widget">
+            <h4 class="widget-title">Browse Sections</h4>
+            <ul class="list-unstyled homepage-link-list mb-0">
+              <li><a href="{{ "government-jobs/" | absURL }}">Government Jobs</a></li>
+              <li><a href="{{ "gulf-jobs/" | absURL }}">Gulf Jobs</a></li>
+              <li><a href="{{ "kerala-jobs/" | absURL }}">Kerala Jobs</a></li>
+              <li><a href="{{ "private-jobs/" | absURL }}">Private Jobs</a></li>
+              <li><a href="{{ "articles/" | absURL }}">Articles</a></li>
+            </ul>
+          </div>
+
+          {{ with .Site.Taxonomies.tags }}
+          <div class="widget homepage-sidebar-widget">
+            <h4 class="widget-title">Popular Tags</h4>
+            <div class="homepage-tag-cloud">
+              {{ range first 8 .ByCount }}
+              <a href="{{ .Page.RelPermalink }}" class="homepage-tag">{{ .Page.Title }}</a>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+
+      <aside class="col-lg-4 col-xl-3 d-none d-lg-block">
+        <div class="homepage-sidebar">
+          {{ partial "ads/home-sidebar-vertical.html" . }}
+
+          <div class="widget homepage-sidebar-widget">
+            <h4 class="widget-title">Latest Updates</h4>
+            <ul class="list-unstyled homepage-side-list mb-0">
+              {{ range first 5 $sortedPosts }}
+              <li class="homepage-side-item">
+                <a href="{{ .Permalink }}" class="homepage-side-link">{{ .Title }}</a>
+                <span class="homepage-date">{{ .PublishDate.Format "02 January 2006" }}</span>
+              </li>
+              {{ end }}
+            </ul>
+          </div>
+
+          <div class="widget homepage-sidebar-widget">
+            <h4 class="widget-title">Browse Sections</h4>
+            <ul class="list-unstyled homepage-link-list mb-0">
+              <li><a href="{{ "government-jobs/" | absURL }}">Government Jobs</a></li>
+              <li><a href="{{ "gulf-jobs/" | absURL }}">Gulf Jobs</a></li>
+              <li><a href="{{ "kerala-jobs/" | absURL }}">Kerala Jobs</a></li>
+              <li><a href="{{ "private-jobs/" | absURL }}">Private Jobs</a></li>
+              <li><a href="{{ "articles/" | absURL }}">Articles</a></li>
+            </ul>
+          </div>
+
+          {{ with .Site.Taxonomies.tags }}
+          <div class="widget homepage-sidebar-widget">
+            <h4 class="widget-title">Popular Tags</h4>
+            <div class="homepage-tag-cloud">
+              {{ range first 10 .ByCount }}
+              <a href="{{ .Page.RelPermalink }}" class="homepage-tag">{{ .Page.Title }}</a>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+{{ end }}

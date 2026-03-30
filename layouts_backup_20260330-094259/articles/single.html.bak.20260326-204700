@@ -1,0 +1,69 @@
+{{ define "main" }}
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-8">
+        <article class="news-article single-page-main">
+          <header class="news-header">
+            <h1 class="news-title">{{ .Title }}</h1>
+
+            <div class="news-meta">
+              <span>By {{ with .Site.Params.author }}{{ . }}{{ else }}Your Job Search Ends{{ end }}</span>
+              <span>{{ .Date.Format "2 January 2006" }}</span>
+            </div>
+          </header>
+
+          <div class="single-page-ad single-page-ad-top">
+            {{ partial "ads/top-banner.html" . }}
+          </div>
+
+          {{ $img := .Params.image }}
+          {{ if $img }}
+            {{ if and (not (hasPrefix $img "http://")) (not (hasPrefix $img "https://")) (not (hasPrefix $img "/")) }}
+              {{ $img = printf "/%s" $img }}
+            {{ end }}
+          <div class="news-image-wrap">
+            <img src="{{ $img }}" alt="{{ .Title }}" class="news-image">
+          </div>
+          {{ end }}
+
+          <div class="news-content">
+            {{ $blocks := split .RawContent "\n## " }}
+            {{ if gt (len $blocks) 0 }}
+              {{ range $index, $block := $blocks }}
+              {{ $section := $block }}
+              {{ if and (gt $index 0) (not (hasPrefix $block "## ")) }}
+                {{ $section = printf "## %s" $block }}
+              {{ end }}
+              {{ if trim $section " \n\r\t" }}
+              <div class="content-section-block">
+                {{ $section | markdownify }}
+              </div>
+              {{ if eq $index 1 }}
+              <div class="single-page-ad single-page-ad-inline">
+                {{ partial "ads/in-content.html" $ }}
+              </div>
+              {{ end }}
+              {{ end }}
+              {{ end }}
+            {{ else }}
+              {{ .Content }}
+            {{ end }}
+          </div>
+
+          <div class="single-page-ad single-page-ad-bottom">
+            {{ partial "ads/bottom-banner.html" . }}
+          </div>
+        </article>
+      </div>
+
+      <aside class="col-lg-4 col-xl-3 d-none d-lg-block">
+        <div class="single-page-sidebar">
+          {{ partial "ads/sidebar-vertical.html" . }}
+          {{ partial "sidebar.html" . }}
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{{ end }}

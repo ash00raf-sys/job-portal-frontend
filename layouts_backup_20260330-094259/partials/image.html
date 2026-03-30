@@ -1,0 +1,12 @@
+{{- $page := .Page -}}
+{{- $src := .Src -}}
+{{- if and (not $src) $page -}}
+  {{- $src = $page.Params.image -}}
+{{- end -}}
+{{- with $src -}}
+  {{- $img := . -}}
+  {{- if and (not (hasPrefix $img "http://")) (not (hasPrefix $img "https://")) (not (hasPrefix $img "/")) -}}
+    {{- $img = printf "/%s" $img -}}
+  {{- end -}}
+<img src="{{ $img }}" alt="{{ $.Alt | default site.Title }}" class="{{ $.Class | default "img-fluid" }}" loading="{{ $.Loading | default "lazy" }}"{{ with $.FetchPriority }} fetchpriority="{{ . }}"{{ end }}>
+{{- end -}}

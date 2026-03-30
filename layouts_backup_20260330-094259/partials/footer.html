@@ -1,0 +1,98 @@
+{{ $contactPage := site.GetPage "section" "contact" }}
+{{ $contactEmail := "" }}
+{{ $contactPhone := "" }}
+{{ with $contactPage }}
+  {{ with .Params.contact_email }}{{ $contactEmail = . }}{{ end }}
+  {{ with .Params.contact_phone }}{{ $contactPhone = . }}{{ end }}
+{{ end }}
+<footer class="text-capitalize">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4 col-sm-6 mb-5">
+        <a href="{{ "/" | relLangURL }}" class="footer-brand-link">
+          {{ partial "brand-logo.html" (dict "ImageClass" "img-fluid mb-3" "TextClass" "brand-text-logo") }}
+        </a>
+        <p class="text-muted mt-3 mb-0">{{ .Site.Params.subtitle }}</p>
+      </div>
+
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Main Sections</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><a class="text-dark" href="{{ `gulf-jobs/` | relLangURL }}">Gulf Jobs</a></li>
+          <li class="mb-3"><a class="text-dark" href="{{ `kerala-jobs/` | relLangURL }}">Kerala Jobs</a></li>
+          <li class="mb-3"><a class="text-dark" href="{{ `government-jobs/` | relLangURL }}">Government Jobs</a></li>
+          <li class="mb-3"><a class="text-dark" href="{{ `private-jobs/` | relLangURL }}">Private Jobs</a></li>
+          <li><a class="text-dark" href="{{ `articles/` | relLangURL }}">Articles</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2 col-sm-6 mb-5">
+        <h6 class="mb-4">Quick Links</h6>
+        <ul class="list-unstyled">
+          {{ range .Site.Menus.footer }}
+          <li class="mb-3"><a class="text-dark" href="{{ .URL | absURL }}">{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Contact</h6>
+        <ul class="list-unstyled">
+          {{ with $contactEmail }}
+          <li class="mb-3"><span class="text-dark"><i class="ti-email mr-3 text-primary"></i>Email: <a class="text-dark" href="mailto:{{ . }}">{{ . }}</a></span></li>
+          {{ end }}
+          {{ with $contactPhone }}
+          <li class="mb-3"><span class="text-dark"><i class="ti-mobile mr-3 text-primary"></i>Phone: <a class="text-dark" href="tel:{{ . }}">{{ . }}</a></span></li>
+          {{ end }}
+        </ul>
+      </div>
+
+      <div class="col-12 border-top py-4 text-center">
+        {{ .Site.Params.copyright | markdownify }}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var indexURL = {{ "index.json" | absURL }}
+</script>
+
+{{ range .Site.Params.plugins.js }}
+<script src="{{ .URL | absURL }}" defer></script>
+{{ end }}
+
+{{ with resources.Get "js/script.js" | minify }}
+<script src="{{ .Permalink }}" defer></script>
+{{ end }}
+
+{{ if and .Site.Params.search.enable (eq .Section "search") }}
+<script src="{{ `plugins/search/fuse.min.js` | absURL }}" defer></script>
+<script src="{{ `plugins/search/mark.js` | absURL }}" defer></script>
+<script src="{{ `plugins/search/search.js` | absURL }}" defer></script>
+{{ end }}
+
+{{ if site.Params.cookies.enable }}
+<div id="js-cookie-box" class="cookie-box cookie-box-hide" data-expire-days="{{ site.Params.cookies.expire_days }}">
+  This site uses cookies. By continuing to use this website, you agree to their use.
+  <span id="js-cookie-button" class="btn btn-sm btn-primary ml-2">I Accept</span>
+</div>
+<style>
+.cookie-box {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 9999;
+  padding: 1rem 2rem;
+  background: rgb(71, 71, 71);
+  transition: all .75s cubic-bezier(.19, 1, .22, 1);
+  color: #fdfdfd;
+}
+
+.cookie-box-hide {
+  display: none;
+}
+</style>
+{{ end }}
