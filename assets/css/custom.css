@@ -1087,3 +1087,23 @@ li {
     min-height: 180px;
   }
 }
+
+.post-tags {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.post-tags .tag {
+  display: inline-block;
+  margin: 4px 6px 4px 0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 12px;
+  background: #f1f1f1;
+  color: #333;
+}
+
+.post-tags .tag:hover {
+  text-decoration: none;
+}

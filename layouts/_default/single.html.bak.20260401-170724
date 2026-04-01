@@ -24,14 +24,6 @@
               <span>{{ .PublishDate.Format "02 January 2006" }}</span>
               {{ end }}
             </div>
-            {{ with .Params.tags }}
-            <div class="post-tags mt-2 mb-2">
-              <strong>Tags:</strong>
-              {{ range . }}
-              <a href="{{ `tags/` | relLangURL }}{{ . | urlize | lower }}/" class="tag">{{ . }}</a>
-              {{ end }}
-            </div>
-            {{ end }}
           </header>
 
           {{ if not $hidePageAds }}
