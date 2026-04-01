@@ -1,7 +1,12 @@
 ---
 title: "Kerala Jobs"
-date: 2026-03-21T10:00:00+05:30
+date: 2026-04-01
 draft: false
-description: "Find Kerala job updates across hospitals, offices, retail, logistics, and local private employers."
+description: "Latest Kerala job updates including PSC, private jobs, and local opportunities."
 ---
-Latest Kerala job updates for local vacancies, district-level hiring, office roles, and service sector opportunities.
+
+## Latest Kerala Jobs 2026
+
+Explore the latest job opportunities in Kerala including government, private, and PSC notifications. Find eligibility details, application steps, and deadlines.
+
+Stay updated with daily job alerts across Kerala.

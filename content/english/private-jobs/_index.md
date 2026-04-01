@@ -1,7 +1,12 @@
 ---
 title: "Private Jobs"
-date: 2026-03-21T10:00:00+05:30
+date: 2026-04-01
 draft: false
-description: "Private company job openings, interview updates, and employer hiring alerts across multiple sectors."
+description: "Latest private job opportunities in India across various industries."
 ---
-Private company vacancy updates for office roles, support roles, hiring drives, and fresher-friendly opportunities.
+
+## Latest Private Jobs in India 2026
+
+Explore private job openings across multiple industries including IT, retail, logistics, and more. Get details on qualifications, salary, and how to apply.
+
+Stay updated with daily private job alerts.
