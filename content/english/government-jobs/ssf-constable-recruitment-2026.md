@@ -1,14 +1,36 @@
 ---
-title: "SSF Constable Recruitment 2026"
-date: "2026-03-24T00:00:00+05:30"
+title: SSF Constable Recruitment 2026
+date: '2026-03-24T00:00:00+05:30'
 draft: false
-description: "The Secretariat Security Force (SSF), under the Ministry of Home Affairs, has invited online applications from eligible Indian citizens for the recruitment of Constable (Barber) and Constable (Washerman) posts. This recruitment is conducted through ITBP. Application Start Date: 30 March 2026 (10:00 AM) Last Date to."
-image: "/images/imported/ssf-constable-recruitment-2026-1.webp"
-apply_before: "Last Date to Apply: 28 April 2026 (11:59 PM) 🧾 Vacancy Details 💰 Salary Details Pay Level: Level-2 Pay Scale: ₹19,900 – ₹63,200 Additional benefits include: Dearness Allowance (DA) House Rent Allowance (HRA) Transport Allowance Leave Travel Concession (LTC) Pension under New Pension Scheme 🎓 Eligibility Criteria Age Limit Minimum: 18 years Maximum: 23 years Age calculated as on: 28 April 2026 Educational Qualification Must have passed 10th (Matriculation) from a recognized board Must qualify in the Trade Test (Barber/Washerman) 🧑‍⚖️ Age Relaxation 📏 Physical Standards Height General Category: 170 cm Relaxation applicable for specific regions Chest (Male Candidates) Unexpanded: 80 cm Expanded: 85 cm 🏃 Selection Process Phase I – Physical Efficiency Test (PET) 1"
-application_mode: "Apply online through: 👉 https://recruitment"
-pay_scale: "₹19,900 – ₹63,200"
-age_limit: "Age Limit Minimum: 18 years Maximum: 23 years Age calculated as on: 28 April 2026 Educational Qualification Must have passed 10th (Matriculation) from a recognized board Must qualify in the Trade Test (Barber/Washerman) 🧑‍⚖️ Age Relaxation 📏 Physical Standards Height General Category: 170 cm Relaxation applicable for specific regions Chest (Male Candidates) Unexpanded: 80 cm Expanded: 85 cm 🏃 Selection Process Phase I – Physical Efficiency Test (PET) 1"
-educational_qualification: "Qualification Must have passed 10th (Matriculation) from a recognized board Must qualify in the Trade Test (Barber/Washerman) 🧑‍⚖️ Age Relaxation 📏 Physical Standards Height General Category: 170 cm Relaxation applicable for specific regions Chest (Male Candidates) Unexpanded: 80 cm Expanded: 85 cm 🏃 Selection Process Phase I – Physical Efficiency Test (PET) 1"
+description: 'The Secretariat Security Force (SSF), under the Ministry of Home Affairs,
+  has invited online applications from eligible Indian citizens for the recruitment
+  of Constable (Barber) and Constable (Washerman) posts. This recruitment is conducted
+  through ITBP. Application Start Date: 30 March 2026 (10:00 AM) Last Date to.'
+image: /images/imported/ssf-constable-recruitment-2026-1.webp
+apply_before: 'Last Date to Apply: 28 April 2026 (11:59 PM) 🧾 Vacancy Details 💰 Salary
+  Details Pay Level: Level-2 Pay Scale: ₹19,900 – ₹63,200 Additional benefits include:
+  Dearness Allowance (DA) House Rent Allowance (HRA) Transport Allowance Leave Travel
+  Concession (LTC) Pension under New Pension Scheme 🎓 Eligibility Criteria Age Limit
+  Minimum: 18 years Maximum: 23 years Age calculated as on: 28 April 2026 Educational
+  Qualification Must have passed 10th (Matriculation) from a recognized board Must
+  qualify in the Trade Test (Barber/Washerman) 🧑‍⚖️ Age Relaxation 📏 Physical Standards
+  Height General Category: 170 cm Relaxation applicable for specific regions Chest
+  (Male Candidates) Unexpanded: 80 cm Expanded: 85 cm 🏃 Selection Process Phase I
+  – Physical Efficiency Test (PET) 1'
+application_mode: 'Apply online through: 👉 https://recruitment'
+age_limit: 'Age Limit Minimum: 18 years Maximum: 23 years Age calculated as on: 28
+  April 2026 Educational Qualification Must have passed 10th (Matriculation) from
+  a recognized board Must qualify in the Trade Test (Barber/Washerman) 🧑‍⚖️ Age Relaxation
+  📏 Physical Standards Height General Category: 170 cm Relaxation applicable for specific
+  regions Chest (Male Candidates) Unexpanded: 80 cm Expanded: 85 cm 🏃 Selection Process
+  Phase I – Physical Efficiency Test (PET) 1'
+educational_qualification: 'Qualification Must have passed 10th (Matriculation) from
+  a recognized board Must qualify in the Trade Test (Barber/Washerman) 🧑‍⚖️ Age Relaxation
+  📏 Physical Standards Height General Category: 170 cm Relaxation applicable for specific
+  regions Chest (Male Candidates) Unexpanded: 80 cm Expanded: 85 cm 🏃 Selection Process
+  Phase I – Physical Efficiency Test (PET) 1'
+pay_scale: ₹19,900 – ₹63,200
+section: government-jobs
 ---
 
 ## Job Overview
