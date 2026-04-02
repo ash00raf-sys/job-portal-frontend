@@ -1,38 +1,5 @@
 {{ define "main" }}
 
-<style>
-.latest-notify-btn{
-  display:inline-block;
-  text-decoration:none;
-  margin-bottom:10px;
-}
-.latest-notify-badge{
-  display:inline-block;
-  padding:14px 28px;
-  border-radius:10px;
-  background:linear-gradient(135deg,#ff7a18,#ffb347);
-  color:#fff;
-  font-weight:700;
-  font-size:16px;
-  letter-spacing:.3px;
-  text-transform:uppercase;
-  box-shadow:0 0 10px rgba(255,122,24,.45), 0 0 24px rgba(255,179,71,.35);
-  border:1px solid rgba(255,255,255,.25);
-  transition:all .25s ease;
-}
-.latest-notify-btn:hover .latest-notify-badge{
-  transform:translateY(-2px) scale(1.02);
-  box-shadow:0 0 14px rgba(255,122,24,.65), 0 0 32px rgba(255,179,71,.50);
-}
-.latest-notify-btn:focus{
-  outline:none;
-}
-.latest-notify-btn:focus .latest-notify-badge{
-  box-shadow:0 0 0 3px rgba(255,179,71,.25), 0 0 16px rgba(255,122,24,.65);
-}
-</style>
-
-
 {{ $sections := slice "gulf-jobs" "kerala-jobs" "government-jobs" "private-jobs" "articles" }}
 {{ $posts := where .Site.RegularPages "Section" "in" $sections }}
 {{ $sortedPosts := $posts.ByDate.Reverse }}
@@ -50,10 +17,8 @@
         <h1 class="homepage-title">A cleaner way to track verified openings, deadlines, and practical career guidance.</h1>
         <p class="homepage-subtitle">Explore fresh government vacancies, Gulf opportunities, private sector roles, and editorial job guidance in one organized portal.</p>
         <div class="homepage-actions">
-          <a class="latest-notify-btn m-1" href="{{ "latest-notifications/" | absURL }}">
-  <span class="latest-notify-badge">Latest Notifications</span>
-</a>
           <a class="btn btn-primary m-1" href="{{ "government-jobs/" | absURL }}">Government Jobs</a>
+            <a class="btn btn-warning m-1" href="{{ "latest-notifications/" | absURL }}">Latest Notifications</a>
           <a class="btn btn-outline-primary m-1" href="{{ "gulf-jobs/" | absURL }}">Gulf Jobs</a>
           <a class="btn btn-outline-primary m-1" href="{{ "articles/" | absURL }}">Articles</a>
         </div>
@@ -162,8 +127,8 @@
           <div class="homepage-section-block">
             <div class="homepage-section-head">
               <h3 class="homepage-subsection-title">Latest Government Jobs</h3>
-          <a class="btn btn-warning m-1" href="{{ "latest-notifications/" | absURL }}">Latest Notifications</a>
               <a href="{{ "government-jobs/" | absURL }}" class="homepage-link-secondary">View all</a>
+            <a class="btn btn-warning m-1" href="{{ "latest-notifications/" | absURL }}">Latest Notifications</a>
             </div>
             <div class="row">
               {{ range $governmentPosts }}
@@ -235,8 +200,8 @@
           <div class="widget homepage-sidebar-widget">
             <h4 class="widget-title">Browse Sections</h4>
             <ul class="list-unstyled homepage-link-list mb-0">
-          <a class="btn btn-warning m-1" href="{{ "latest-notifications/" | absURL }}">Latest Notifications</a>
               <li><a href="{{ "government-jobs/" | absURL }}">Government Jobs</a></li>
+            <a class="btn btn-warning m-1" href="{{ "latest-notifications/" | absURL }}">Latest Notifications</a>
               <li><a href="{{ "gulf-jobs/" | absURL }}">Gulf Jobs</a></li>
               <li><a href="{{ "kerala-jobs/" | absURL }}">Kerala Jobs</a></li>
               <li><a href="{{ "private-jobs/" | absURL }}">Private Jobs</a></li>
@@ -276,8 +241,8 @@
           <div class="widget homepage-sidebar-widget">
             <h4 class="widget-title">Browse Sections</h4>
             <ul class="list-unstyled homepage-link-list mb-0">
-          <a class="btn btn-warning m-1" href="{{ "latest-notifications/" | absURL }}">Latest Notifications</a>
               <li><a href="{{ "government-jobs/" | absURL }}">Government Jobs</a></li>
+            <a class="btn btn-warning m-1" href="{{ "latest-notifications/" | absURL }}">Latest Notifications</a>
               <li><a href="{{ "gulf-jobs/" | absURL }}">Gulf Jobs</a></li>
               <li><a href="{{ "kerala-jobs/" | absURL }}">Kerala Jobs</a></li>
               <li><a href="{{ "private-jobs/" | absURL }}">Private Jobs</a></li>
