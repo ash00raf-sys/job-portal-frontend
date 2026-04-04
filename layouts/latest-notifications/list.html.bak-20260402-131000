@@ -1,0 +1,59 @@
+{{ define "main" }}
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="mb-4 text-center">
+          <h1>{{ .Title }}</h1>
+          {{ with .Content }}
+          <div class="content">{{ . }}</div>
+          {{ end }}
+        </div>
+
+        {{ $allowed := slice "government-jobs" "kerala-jobs" "private-jobs" "gulf-jobs" "articles" }}
+        {{ $pages := where site.RegularPages "Section" "in" $allowed }}
+        {{ $pages = where $pages "Draft" "!=" true }}
+        {{ $pages = sort $pages "Date" "desc" }}
+
+        {{ if gt (len $pages) 0 }}
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Title</th>
+                  <th>Section</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{ range first 100 $pages }}
+                <tr>
+                  <td>{{ .Date.Format "02 Jan 2006" }}</td>
+                  <td><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+                  <td>{{ .Section | humanize }}</td>
+                </tr>
+                {{ end }}
+              </tbody>
+            </table>
+          </div>
+        {{ else }}
+          <p>No notifications found.</p>
+        {{ end }}
+
+        <div class="mt-5">
+          <h2>Explore Categories</h2>
+          <ul>
+            <li><a href="/government-jobs/">Government Jobs</a></li>
+            <li><a href="/kerala-jobs/">Kerala Jobs</a></li>
+            <li><a href="/private-jobs/">Private Jobs</a></li>
+            <li><a href="/gulf-jobs/">Gulf Jobs</a></li>
+            <li><a href="/articles/">Articles</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{ end }}

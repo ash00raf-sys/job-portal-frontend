@@ -31,6 +31,19 @@ educational_qualification: 'Qualification Must have passed 10th (Matriculation) 
   Phase I – Physical Efficiency Test (PET) 1'
 pay_scale: ₹19,900 – ₹63,200
 section: government-jobs
+recruitment_board_clean: Government Recruitment
+post_name_clean: SSF Constable Recruitment 2026
+qualification_clean: 10TH
+advt_no_clean: —
+last_date_clean: 28-04-2026
+last_date_iso: '2026-04-28'
+has_valid_last_date: true
+is_expired: false
+vacancies_clean: —
+application_mode_clean: ONLINE
+age_limit_clean: 'Age Limit Minimum: 18 years Maximum: 23 years Age calculated'
+experience_clean: —
+job_location_clean: —
 ---
 
 ## Job Overview

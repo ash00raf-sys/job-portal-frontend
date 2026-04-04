@@ -1,0 +1,438 @@
+{{ define "main" }}
+
+{{ $allowed := slice "government-jobs" "kerala-jobs" "private-jobs" "gulf-jobs" }}
+{{ $pages := where site.RegularPages "Section" "in" $allowed }}
+{{ $pages = where $pages "Draft" "!=" true }}
+{{ $pages = sort $pages "Date" "desc" }}
+{{ $paginator := .Paginate $pages 50 }}
+{{ $today := time.AsTime (now.Format "2006-01-02") }}
+
+<style>
+  .latest-notifications-page {
+    padding: 2.5rem 0 3rem;
+  }
+
+  .latest-notifications-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .latest-notifications-hero {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  }
+
+  .latest-notifications-hero h1 {
+    margin: 0 0 0.5rem;
+    color: #102a43;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .latest-notifications-hero-copy {
+    color: #486581;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .latest-notifications-hero-copy > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .latest-notifications-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+  }
+
+  .latest-notifications-table {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+  }
+
+  .latest-notifications-table thead th {
+    padding: 0.95rem 0.85rem;
+    border-bottom: 1px solid #cbd5e1;
+    background: #eff6ff;
+    color: #1e3a5f;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .latest-notifications-table tbody td {
+    padding: 0.9rem 0.85rem;
+    border-bottom: 1px solid #e5edf5;
+    color: #243b53;
+    font-size: 0.94rem;
+    line-height: 1.45;
+    vertical-align: top;
+  }
+
+  .latest-notifications-table tbody tr:hover {
+    background: #f8fbff;
+  }
+
+  .latest-notifications-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .latest-notifications-name {
+    font-weight: 600;
+    color: #102a43;
+  }
+
+  .latest-notifications-link {
+    display: inline-block;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid #0f766e;
+    border-radius: 999px;
+    color: #0f766e;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .latest-notifications-link:hover,
+  .latest-notifications-link:focus {
+    background: #ecfeff;
+    color: #115e59;
+    text-decoration: none;
+  }
+
+  .latest-notifications-empty {
+    padding: 2rem 1.25rem;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #52606d;
+    text-align: center;
+  }
+
+  .latest-notifications-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .latest-notifications-pagination a,
+  .latest-notifications-pagination span {
+    display: inline-block;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #1f3a56;
+    font-size: 0.92rem;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .latest-notifications-pagination .is-current {
+    border-color: #0f766e;
+    background: #0f766e;
+    color: #ffffff;
+  }
+
+  .latest-notifications-pagination a:hover,
+  .latest-notifications-pagination a:focus {
+    border-color: #0f766e;
+    color: #0f766e;
+    text-decoration: none;
+  }
+
+  @media (max-width: 767px) {
+    .latest-notifications-page {
+      padding-top: 1.5rem;
+    }
+
+    .latest-notifications-hero {
+      padding: 1.1rem;
+      border-radius: 14px;
+    }
+
+    .latest-notifications-hero h1 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+
+<section class="latest-notifications-page">
+  <div class="latest-notifications-shell">
+    <header class="latest-notifications-hero">
+      <h1>{{ .Title }}</h1>
+      <div class="latest-notifications-hero-copy">
+        {{ with .Content }}
+          {{ . }}
+        {{ else }}
+          <p>Browse the latest recruitment updates in a compact notification table with post dates, board names, qualifications, advertisement numbers, and closing dates.</p>
+        {{ end }}
+      </div>
+    </header>
+
+    {{ if gt (len $paginator.Pages) 0 }}
+      <div class="latest-notifications-table-wrap">
+        <table class="latest-notifications-table">
+          <thead>
+            <tr>
+              <th>Post Date</th>
+              <th>Recruitment Board</th>
+              <th>Exam / Post Name</th>
+              <th>Qualification</th>
+              <th>Advt No</th>
+              <th>Last Date</th>
+              <th>Apply Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ range $paginator.Pages }}
+              {{ $item := . }}
+              {{ $postDate := "—" }}
+              {{ if $item.Date }}
+                {{ $postDate = $item.Date.Format "02/01/2006" }}
+              {{ else }}
+                {{ if $item.PublishDate }}
+                  {{ $postDate = $item.PublishDate.Format "02/01/2006" }}
+                {{ else }}
+                  {{ if $item.Lastmod }}
+                    {{ $postDate = $item.Lastmod.Format "02/01/2006" }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+
+              {{ $title := $item.Title }}
+              {{ $board := "" }}
+              {{ with $item.Params.organization }}
+                {{ $board = printf "%v" . }}
+              {{ else }}
+                {{ with $item.Params.recruitment_board }}
+                  {{ $board = printf "%v" . }}
+                {{ else }}
+                  {{ with $item.Params.department }}
+                    {{ $board = printf "%v" . }}
+                  {{ else }}
+                    {{ with $item.Params.board }}
+                      {{ $board = printf "%v" . }}
+                    {{ else }}
+                      {{ with $item.Params.company }}
+                        {{ $board = printf "%v" . }}
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+              {{ $board = $board | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+              {{ if eq $board "" }}
+                {{ if ne ($title | plainify | replaceRE "^\\s+|\\s+$" "") "" }}
+                  {{ $board = $title | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+                {{ else }}
+                  {{ $board = "—" }}
+                {{ end }}
+              {{ end }}
+
+              {{ $postName := "" }}
+              {{ with $item.Params.post_name }}
+                {{ $postName = printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+              {{ else }}
+                {{ if $title }}
+                  {{ $postName = $title | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+                {{ else }}
+                  {{ with $item.Params.exam_name }}
+                    {{ $postName = printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+              {{ if eq $postName "" }}
+                {{ $postName = "Untitled Notification" }}
+              {{ end }}
+
+              {{ $qualificationRaw := "" }}
+              {{ with $item.Params.qualification }}
+                {{ $qualificationRaw = printf "%v" . }}
+              {{ else }}
+                {{ with $item.Params.educational_qualification }}
+                  {{ $qualificationRaw = printf "%v" . }}
+                {{ else }}
+                  {{ with $item.Params.education }}
+                    {{ $qualificationRaw = printf "%v" . }}
+                  {{ else }}
+                    {{ with $item.Params.eligibility }}
+                      {{ $qualificationRaw = printf "%v" . }}
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+              {{ $qualification := "—" }}
+              {{ if ne $qualificationRaw "" }}
+                {{ $qualificationText := $qualificationRaw | plainify | replaceRE "[✅✔•▪►▶★☆⭐🔥📌👉]" " " | replaceRE "(?i)^\\s*qualification\\s*[:\\-]?\\s*" "" }}
+                {{ $qualificationText = $qualificationText | replaceRE "(?i)\\b(age limit|salary|pay scale|selection process|physical standards|age relaxation|application fee|how to apply|important dates)\\b.*" "" }}
+                {{ $qualificationText = $qualificationText | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+                {{ if ne $qualificationText "" }}
+                  {{ if gt (len $qualificationText) 100 }}
+                    {{ $qualification = printf "%s..." (slicestr $qualificationText 0 97) }}
+                  {{ else }}
+                    {{ $qualification = $qualificationText }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+
+              {{ $advtRaw := "" }}
+              {{ with $item.Params.advt_no }}
+                {{ $advtRaw = printf "%v" . }}
+              {{ else }}
+                {{ with $item.Params.notification_no }}
+                  {{ $advtRaw = printf "%v" . }}
+                {{ else }}
+                  {{ with $item.Params.advertisement_no }}
+                    {{ $advtRaw = printf "%v" . }}
+                  {{ else }}
+                    {{ with $item.Params.adv_no }}
+                      {{ $advtRaw = printf "%v" . }}
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+              {{ $advtNo := "—" }}
+              {{ if ne $advtRaw "" }}
+                {{ $advtText := $advtRaw | plainify | replaceRE "(?i)^\\s*(advt\\.?|advertisement|notification)\\s*(no\\.?|number)?\\s*[:\\-]?\\s*" "" | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+                {{ if not (in (slice "" "na" "n/a" "nil" "none" "-" "--" "—") (lower $advtText)) }}
+                  {{ $advtNo = $advtText }}
+                {{ end }}
+              {{ end }}
+
+              {{ $lastDateRaw := "" }}
+              {{ $lastDateSource := "" }}
+              {{ with $item.Params.last_date_clean }}
+                {{ $lastDateRaw = printf "%v" . }}
+                {{ $lastDateSource = "last_date_clean" }}
+              {{ else }}
+                {{ with $item.Params.last_date }}
+                  {{ $lastDateRaw = printf "%v" . }}
+                  {{ $lastDateSource = "last_date" }}
+                {{ else }}
+                  {{ with $item.Params.lastdate }}
+                    {{ $lastDateRaw = printf "%v" . }}
+                    {{ $lastDateSource = "lastdate" }}
+                  {{ else }}
+                    {{ with $item.Params.apply_last_date }}
+                      {{ $lastDateRaw = printf "%v" . }}
+                      {{ $lastDateSource = "apply_last_date" }}
+                    {{ else }}
+                      {{ with $item.Params.closing_date }}
+                        {{ $lastDateRaw = printf "%v" . }}
+                        {{ $lastDateSource = "closing_date" }}
+                      {{ else }}
+                        {{ with $item.Params.deadline }}
+                          {{ $lastDateRaw = printf "%v" . }}
+                          {{ $lastDateSource = "deadline" }}
+                        {{ else }}
+                          {{ with $item.Params.apply_before }}
+                            {{ $lastDateRaw = printf "%v" . }}
+                            {{ $lastDateSource = "apply_before" }}
+                          {{ end }}
+                        {{ end }}
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+              {{ $lastDate := "—" }}
+              {{ $showRow := false }}
+              {{ if ne $lastDateRaw "" }}
+                {{ $lastDateText := $lastDateRaw | plainify | replaceRE "[✅✔•▪►▶★☆⭐🔥📌👉]" " " }}
+                {{ $lastDateText = $lastDateText | replaceRE "(?i).*?(last date|apply before|closing date)\\s*[:\\-]?\\s*" "" }}
+                {{ $lastDateText = $lastDateText | replaceRE "(?i)\\b(salary|pay scale|selection process|age limit|age relaxation|physical standards|application fee|eligibility)\\b.*" "" }}
+                {{ $lastDateText = $lastDateText | replaceRE "(?i)\\b(up to|before|till)\\b.*" "" }}
+                {{ $lastDateText = $lastDateText | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+                {{ $dateMatches := findRE "(?i)\\b\\d{1,2}[./-]\\d{1,2}[./-]\\d{2,4}\\b|\\b\\d{4}-\\d{2}-\\d{2}\\b|\\b\\d{1,2}\\s+[A-Za-z]{3,9}\\s+\\d{4}\\b|\\b[A-Za-z]{3,9}\\s+\\d{1,2},\\s+\\d{4}\\b" $lastDateText 1 }}
+                {{ if gt (len $dateMatches) 0 }}
+                  {{ $lastDate = index $dateMatches 0 }}
+                  {{ $parseCandidate := "" }}
+                  {{ if gt (len (findRE "^\\d{4}-\\d{2}-\\d{2}$" $lastDate 1)) 0 }}
+                    {{ $parseCandidate = $lastDate }}
+                  {{ else }}
+                    {{ if gt (len (findRE "^\\d{1,2}[./-]\\d{1,2}[./-]\\d{4}$" $lastDate 1)) 0 }}
+                      {{ $parseCandidate = replaceRE "^([0-9]{1,2})[./-]([0-9]{1,2})[./-]([0-9]{4})$" "${3}-${2}-${1}" $lastDate }}
+                    {{ else }}
+                      {{ if gt (len (findRE "^\\d{1,2}[./-]\\d{1,2}[./-]\\d{2}$" $lastDate 1)) 0 }}
+                        {{ $parseCandidate = replaceRE "^([0-9]{1,2})[./-]([0-9]{1,2})[./-]([0-9]{2})$" "20${3}-${2}-${1}" $lastDate }}
+                      {{ else }}
+                        {{ $parseCandidate = $lastDate }}
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+                  {{ if ne $parseCandidate "" }}
+                    {{ $parsed := time.AsTime $parseCandidate }}
+                    {{ if ge $parsed $today }}
+                      {{ $showRow = true }}
+                    {{ end }}
+                  {{ end }}
+                {{ else }}
+                  {{ if ne $lastDateSource "apply_before" }}
+                    {{ if and (lt (len $lastDateText) 32) (not (findRE "(?i)\\b(day|days|week|weeks|month|months|advertisement publication|from the date)\\b" $lastDateText 1)) }}
+                      {{ if ne $lastDateText "" }}
+                        {{ $lastDate = $lastDateText }}
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+
+              {{ if $showRow }}
+                <tr>
+                  <td>{{ $postDate }}</td>
+                  <td>{{ $board }}</td>
+                  <td><span class="latest-notifications-name">{{ $postName }}</span></td>
+                  <td>{{ $qualification }}</td>
+                  <td>{{ $advtNo }}</td>
+                  <td>{{ $lastDate }}</td>
+                  <td><a class="latest-notifications-link" href="{{ .RelPermalink }}">Apply Details</a></td>
+                </tr>
+              {{ end }}
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
+
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="latest-notifications-pagination" aria-label="Latest notifications pagination">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}">Previous</a>
+          {{ end }}
+
+          {{ range $paginator.Pagers }}
+            {{ if eq .PageNumber $paginator.PageNumber }}
+              <span class="is-current">{{ .PageNumber }}</span>
+            {{ else }}
+              <a href="{{ .URL }}">{{ .PageNumber }}</a>
+            {{ end }}
+          {{ end }}
+
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}">Next</a>
+          {{ end }}
+        </nav>
+      {{ end }}
+    {{ else }}
+      <div class="latest-notifications-empty">
+        <p>No notifications found.</p>
+      </div>
+    {{ end }}
+  </div>
+</section>
+
+{{ end }}

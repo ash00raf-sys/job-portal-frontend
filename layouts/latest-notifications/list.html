@@ -1,58 +1,326 @@
 {{ define "main" }}
 
-<section class="section">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <div class="mb-4 text-center">
-          <h1>{{ .Title }}</h1>
-          {{ with .Content }}
-          <div class="content">{{ . }}</div>
-          {{ end }}
-        </div>
+{{ $allowedSections := slice "government-jobs" "kerala-jobs" "private-jobs" "gulf-jobs" }}
+{{ $todayISO := now.Format "2006-01-02" }}
+{{ $closingSoonISO := (now.AddDate 0 0 7).Format "2006-01-02" }}
+{{ $rows := slice }}
 
-        {{ $allowed := slice "government-jobs" "kerala-jobs" "private-jobs" "gulf-jobs" "articles" }}
-        {{ $pages := where site.RegularPages "Section" "in" $allowed }}
-        {{ $pages = where $pages "Draft" "!=" true }}
-        {{ $pages = sort $pages "Date" "desc" }}
+{{ range where .Site.RegularPages "Section" "in" $allowedSections }}
+  {{ if not .Draft }}
+    {{ $item := . }}
 
-        {{ if gt (len $pages) 0 }}
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Title</th>
-                  <th>Section</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{ range first 100 $pages }}
-                <tr>
-                  <td>{{ .Date.Format "02 Jan 2006" }}</td>
-                  <td><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
-                  <td>{{ .Section | humanize }}</td>
-                </tr>
-                {{ end }}
-              </tbody>
-            </table>
-          </div>
-        {{ else }}
-          <p>No notifications found.</p>
+    {{ $postDate := "—" }}
+    {{ if $item.Date }}
+      {{ $postDate = $item.Date.Format "02-01-2006" }}
+    {{ else if $item.PublishDate }}
+      {{ $postDate = $item.PublishDate.Format "02-01-2006" }}
+    {{ else if $item.Lastmod }}
+      {{ $postDate = $item.Lastmod.Format "02-01-2006" }}
+    {{ end }}
+
+    {{ $board := "Government Recruitment" }}
+    {{ with $item.Params.recruitment_board_clean }}
+      {{ $cleanBoard := printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+      {{ if ne $cleanBoard "" }}{{ $board = $cleanBoard }}{{ end }}
+    {{ end }}
+
+    {{ $postName := $item.Title | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+    {{ with $item.Params.post_name_clean }}
+      {{ $cleanPostName := printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+      {{ if ne $cleanPostName "" }}{{ $postName = $cleanPostName }}{{ end }}
+    {{ end }}
+    {{ if eq $postName "" }}{{ $postName = "Untitled Notification" }}{{ end }}
+
+    {{ $qualification := "—" }}
+    {{ with $item.Params.qualification_clean }}
+      {{ $cleanQualification := printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+      {{ if ne $cleanQualification "" }}{{ $qualification = $cleanQualification }}{{ end }}
+    {{ end }}
+
+    {{ $advtNo := "—" }}
+    {{ with $item.Params.advt_no_clean }}
+      {{ $cleanAdvtNo := printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+      {{ if ne $cleanAdvtNo "" }}{{ $advtNo = $cleanAdvtNo }}{{ end }}
+    {{ end }}
+
+    {{ $lastDateDisplay := "—" }}
+    {{ $lastDateISO := "" }}
+    {{ $deadlineBadge := "" }}
+    {{ $sortKey := printf "1_%s" $item.RelPermalink }}
+    {{ $showRow := false }}
+    {{ $hasValidLastDate := false }}
+
+    {{ with $item.Params.has_valid_last_date }}
+      {{ if . }}{{ $hasValidLastDate = true }}{{ end }}
+    {{ end }}
+
+    {{ with $item.Params.last_date_clean }}
+      {{ $cleanLastDate := printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+      {{ if ne $cleanLastDate "" }}{{ $lastDateDisplay = $cleanLastDate }}{{ end }}
+    {{ end }}
+    {{ with $item.Params.last_date_iso }}
+      {{ $cleanLastDateISO := printf "%v" . | plainify | replaceRE "\\s+" " " | replaceRE "^\\s+|\\s+$" "" }}
+      {{ if ne $cleanLastDateISO "" }}
+        {{ $lastDateISO = $cleanLastDateISO }}
+        {{ if eq (len (findRE "^\\d{4}-\\d{2}-\\d{2}$" $lastDateISO)) 1 }}
+          {{ $hasValidLastDate = true }}
         {{ end }}
+      {{ end }}
+    {{ end }}
 
-        <div class="mt-5">
-          <h2>Explore Categories</h2>
-          <ul>
-            <li><a href="/government-jobs/">Government Jobs</a></li>
-            <li><a href="/kerala-jobs/">Kerala Jobs</a></li>
-            <li><a href="/private-jobs/">Private Jobs</a></li>
-            <li><a href="/gulf-jobs/">Gulf Jobs</a></li>
-            <li><a href="/articles/">Articles</a></li>
-          </ul>
-        </div>
+    {{ if and $hasValidLastDate (ne $lastDateISO "") (ge $lastDateISO $todayISO) (not $item.Params.is_expired) }}
+      {{ $showRow = true }}
+      {{ $sortKey = printf "0_%s_%s" $lastDateISO $item.RelPermalink }}
+      {{ if eq $lastDateISO $todayISO }}
+        {{ $deadlineBadge = "Last Date Today" }}
+      {{ else if le $lastDateISO $closingSoonISO }}
+        {{ $deadlineBadge = "Closing Soon" }}
+      {{ end }}
+    {{ end }}
+
+    {{ if $showRow }}
+      {{ $rows = $rows | append (dict
+        "postDate" $postDate
+        "board" $board
+        "postName" $postName
+        "qualification" $qualification
+        "advtNo" $advtNo
+        "lastDateISO" $lastDateISO
+        "lastDateDisplay" $lastDateDisplay
+        "deadlineBadge" $deadlineBadge
+        "sortKey" $sortKey
+        "relPermalink" $item.RelPermalink
+      ) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ $final := sort $rows "sortKey" "asc" }}
+
+<style>
+  .latest-notifications-page {
+    padding: 2.5rem 0 3rem;
+  }
+
+  .latest-notifications-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .latest-notifications-hero {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  }
+
+  .latest-notifications-hero h1 {
+    margin: 0 0 0.5rem;
+    color: #102a43;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .latest-notifications-hero-copy {
+    color: #486581;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .latest-notifications-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+  }
+
+  .latest-notifications-table {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+  }
+
+  .latest-notifications-table thead th {
+    padding: 0.95rem 0.85rem;
+    border-bottom: 1px solid #cbd5e1;
+    background: #eff6ff;
+    color: #1e3a5f;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .latest-notifications-table tbody td {
+    padding: 0.9rem 0.85rem;
+    border-bottom: 1px solid #e5edf5;
+    color: #243b53;
+    font-size: 0.94rem;
+    line-height: 1.45;
+    vertical-align: top;
+  }
+
+  .latest-notifications-table tbody tr:hover {
+    background: #f8fbff;
+  }
+
+  .latest-notifications-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .latest-notifications-name {
+    font-weight: 600;
+    color: #102a43;
+    text-decoration: none;
+  }
+
+  .latest-notifications-name:hover,
+  .latest-notifications-name:focus {
+    color: #0f766e;
+    text-decoration: underline;
+  }
+
+  .latest-notifications-link {
+    display: inline-block;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid #0f766e;
+    border-radius: 999px;
+    color: #0f766e;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .latest-notifications-link:hover,
+  .latest-notifications-link:focus {
+    background: #ecfeff;
+    color: #115e59;
+    text-decoration: none;
+  }
+
+  .latest-notifications-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+  }
+
+  .latest-notifications-date-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .latest-notifications-date-badge.is-today {
+    background: #fff4d6;
+    color: #8a5a00;
+  }
+
+  .latest-notifications-date-badge.is-soon {
+    background: #e0f2fe;
+    color: #075985;
+  }
+
+  .latest-notifications-date-cell,
+  .latest-notifications-date-head,
+  .latest-notifications-action-cell,
+  .latest-notifications-action-head {
+    white-space: nowrap;
+  }
+
+  .latest-notifications-empty {
+    padding: 2rem 1.25rem;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #52606d;
+    text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    .latest-notifications-page {
+      padding-top: 1.5rem;
+    }
+
+    .latest-notifications-hero {
+      padding: 1.1rem;
+      border-radius: 14px;
+    }
+
+    .latest-notifications-hero h1 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+
+<section class="latest-notifications-page">
+  <div class="latest-notifications-shell">
+    <header class="latest-notifications-hero">
+      <h1>{{ .Title }}</h1>
+      <div class="latest-notifications-hero-copy">
+        {{ with .Content }}
+          {{ . }}
+        {{ else }}
+          <p>Latest notifications in India are updated regularly on JobSearchEnds.</p>
+        {{ end }}
       </div>
-    </div>
+    </header>
+
+    {{ if gt (len $final) 0 }}
+      <div class="latest-notifications-table-wrap">
+        <table class="latest-notifications-table">
+          <thead>
+            <tr>
+              <th>Post Date</th>
+              <th>Recruitment Board</th>
+              <th>Exam / Post Name</th>
+              <th>Qualification</th>
+              <th>Advt No</th>
+              <th class="latest-notifications-date-head">Last Date</th>
+              <th class="latest-notifications-action-head">Apply Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ range $final }}
+              <tr>
+                <td>{{ index . "postDate" }}</td>
+                <td>{{ index . "board" }}</td>
+                <td><a class="latest-notifications-name" href="{{ index . "relPermalink" }}">{{ index . "postName" }}</a></td>
+                <td>{{ index . "qualification" }}</td>
+                <td>{{ index . "advtNo" }}</td>
+                <td class="latest-notifications-date-cell">
+                  {{ if ne (index . "lastDateISO") "" }}
+                    <span class="latest-notifications-date">
+                      <span>{{ index . "lastDateDisplay" }}</span>
+                      {{ with index . "deadlineBadge" }}
+                        <span class="latest-notifications-date-badge{{ if eq . "Last Date Today" }} is-today{{ else }} is-soon{{ end }}">{{ . }}</span>
+                      {{ end }}
+                    </span>
+                  {{ else }}
+                    —
+                  {{ end }}
+                </td>
+                <td class="latest-notifications-action-cell"><a class="latest-notifications-link" href="{{ index . "relPermalink" }}">Apply Details</a></td>
+              </tr>
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
+    {{ else }}
+      <div class="latest-notifications-empty">
+        <p>No active notifications found.</p>
+      </div>
+    {{ end }}
   </div>
 </section>
 

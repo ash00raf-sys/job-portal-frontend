@@ -1,29 +1,45 @@
 ---
-title: "Head Constable Recruitment 2026"
-date: "2026-03-24T00:00:00+05:30"
+title: Head Constable Recruitment 2026
+date: '2026-03-24T00:00:00+05:30'
 draft: false
-description: "SSB invites online applications for 233 Head Constable posts (Steward, Communication, Electrician, Veterinary). Selection via PET, PST, CBT, skill test and verification. Pay Level-4 (₹25,500–₹81,100) with allowances."
-image: "/images/imported/ssf-constable-recruitment-2026-1.png"
-organization: "Sashastra Seema Bal (SSB)"
-post_name: "Head Constable (Steward, Communication, Electrician, Veterinary)"
-job_location: "India"
-total_vacancies: "233"
-apply_before: "30 days from the date of advertisement publication"
-application_mode: "Online"
-pay_scale: "₹25,500 – ₹81,100"
-age_limit: "18–27 years (18–25 for Electrician)"
-educational_qualification: "10th / 12th Pass with Diploma / ITI / relevant experience (post-wise)"
-experience_required: "Required for some posts"
-official_notification: ""
-apply_link: "https://recruitment.ssb.gov.in,"
+description: SSB invites online applications for 233 Head Constable posts (Steward,
+  Communication, Electrician, Veterinary). Selection via PET, PST, CBT, skill test
+  and verification. Pay Level-4 (₹25,500–₹81,100) with allowances.
+image: /images/imported/ssf-constable-recruitment-2026-1.png
+organization: Sashastra Seema Bal (SSB)
+post_name: Head Constable (Steward, Communication, Electrician, Veterinary)
+job_location: India
+total_vacancies: '233'
+apply_before: 30 days from the date of advertisement publication
+application_mode: Online
+pay_scale: ₹25,500 – ₹81,100
+age_limit: 18–27 years (18–25 for Electrician)
+educational_qualification: 10th / 12th Pass with Diploma / ITI / relevant experience
+  (post-wise)
+experience_required: Required for some posts
+official_notification: ''
+apply_link: https://recruitment.ssb.gov.in,
 categories:
-- "Government Jobs"
+- Government Jobs
 tags:
-  - "SSB"
-  - "Head Constable"
-  - "Recruitment 2026"
-  - "Central Armed Police Force"
-  - "Government of India"
+- SSB
+- Head Constable
+- Recruitment 2026
+- Central Armed Police Force
+- Government of India
+recruitment_board_clean: Sashastra Seema Bal (SSB)
+post_name_clean: Head Constable (Steward, Communication, Electrician, Veterinary)
+qualification_clean: 10TH / 12TH / ITI / DIPLOMA
+advt_no_clean: —
+last_date_clean: ''
+last_date_iso: ''
+has_valid_last_date: false
+is_expired: false
+vacancies_clean: '233'
+application_mode_clean: ONLINE
+age_limit_clean: 18-27
+experience_clean: Required for some posts
+job_location_clean: India
 ---
 ## Job Overview
 
